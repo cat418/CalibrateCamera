@@ -3,7 +3,6 @@ use_camera: false
 #如果不使用相机 图片路径
 frame_path: "/home/xzq/project/CalibrateCamera/frame/"
 #图片格式 
-style: "*.jpg"
-#要标定的图片数量
-frame_num: 19
+style: "*.bmp"
+
 

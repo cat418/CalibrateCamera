@@ -1,7 +1,7 @@
 #include "calibrate.h"
 #include <string>
 
-void Calibrate::calibrate_camera( bool use_camera, std::string path, int frame_num, std::string style ) {   
+void Calibrate::calibrate_camera( std::string path, std::string style ) {   
     //读取所有图像
     std::vector<cv::Mat> imgs;
     std::string onePath;

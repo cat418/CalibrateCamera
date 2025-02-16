@@ -12,14 +12,13 @@ int main()
     bool use_camera = config["use_camera"].as<bool>();
     std::string frame_path = config["frame_path"].as<std::string>();
     std::string style = config["style"].as<std::string>();
-    int frame_num = config["frame_num"].as<int>();
-
+    
     Calibrate c;
     if( use_camera ) {
         //打开相机 得到图像
         c.openAndGet( frame_path, style );
     }
     //计算
-    c.calibrate_camera( use_camera,frame_path, frame_num, style );
+    c.calibrate_camera( frame_path, style );
     c.GetResult();
 }

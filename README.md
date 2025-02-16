@@ -6,4 +6,6 @@ Esc退出
 如果使用图像:
 将配置文件config 中的use_camera改为 false
 将图片放入文件夹 frame
-修改config 中 图片路径 为绝对路径
+修改config 中 图片路径 /**/frame/
+
+style为如: *.jpg 的格式
