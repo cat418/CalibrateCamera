@@ -1,7 +1,8 @@
 #include "calibrate.h"
 #include "HikDriver/HikDriver.h"
+#include <string>
 
-void Calibrate::openAndGet()
+void Calibrate::openAndGet( std::string img_path, std::string style )
 {
     HikDriver hik_drive(0);
     if(hik_drive.isConnected()) {
@@ -24,10 +25,10 @@ void Calibrate::openAndGet()
         int key = cv::waitKey(1);    
         if( key == 32 ) {
             //保存图片
-            m_output = "/home/xzq/project/CalibrateCamera/frame/img";
+            m_output = img_path;
             std::string num = std::to_string ( count );
-            std::string style = ".jpg";
-            std::string outputPath = m_output + num + style;
+            std::string m_style = style;
+            std::string outputPath = m_output + num + m_style;
             cv::imwrite( outputPath, frame);
             count ++;
             m_outputPath.push_back( outputPath );

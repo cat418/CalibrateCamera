@@ -1,24 +1,36 @@
 #include "calibrate.h"
+#include <string>
 
-void Calibrate::calibrate_camera() {   
+void Calibrate::calibrate_camera( bool use_camera, std::string path, int frame_num, std::string style ) {   
     //读取所有图像
     std::vector<cv::Mat> imgs;
     std::string onePath;
-    //创建文本
-    std::ofstream output ("calibrate.txt");
-    if( !output.is_open() ) {
-        std::cout << "为图像路径创建文本失败" << std::endl;
+
+    if( use_camera ) {
+        //创建文本
+        std::ofstream output ("calibrate.txt");
+        if( !output.is_open() ) {
+            std::cout << "为图像路径创建文本失败" << std::endl;
+        }
+        //将图片路径写入
+        for ( int i=0; i < m_count; i ++) {
+            output << m_outputPath[i] << std::endl;
+        }
+        //获取每一个图像的路径
+        std::ifstream allPath("calibrate.txt");
+        while (std::getline(allPath,onePath)) {
+            cv::Mat img = cv::imread( onePath );
+            imgs.push_back( img );
+        }
+    } else {
+        for( int i = 1; i < frame_num + 1; i ++ ) {
+            std::string num = std::to_string( i );
+            onePath = path + num +style;
+            cv::Mat img = cv::imread( onePath );
+            imgs.push_back( img );
+        }
     }
-    //将图片路径写入
-    for ( int i=0; i < m_count; i ++) {
-        output << m_outputPath[i] << std::endl;
-    }
-    //获取每一个图像的路径
-    std::ifstream allPath("calibrate.txt");
-    while (std::getline(allPath,onePath)) {
-        cv::Mat img = cv::imread( onePath );
-        imgs.push_back( img );
-    }
+
     m_board_size = cv::Size(9,6);//方格标定板内角点数目(行,列)
     int num = 0;
     for( int i = 0; i < imgs.size(); i++ ) {
@@ -26,8 +38,8 @@ void Calibrate::calibrate_camera() {
         cv::Mat gray;
         cvtColor( frame, gray, cv::COLOR_BGR2GRAY );
         one_point_2D.clear();
-        findChessboardCorners( gray, m_board_size, one_point_2D );//计算方格标定板角点
-        find4QuadCornerSubpix( gray, one_point_2D, cv::Size(5,5) );//细化方格标定板角点坐标
+        bool find = findChessboardCorners( gray, m_board_size, one_point_2D );//计算方格标定板角点
+        if( !find ) { continue; };
         //绘制标定结果
         cv::Mat img = frame.clone();
         cv::drawChessboardCorners( img, m_board_size, one_point_2D, true);

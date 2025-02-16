@@ -4,6 +4,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <fstream>
+#include <string>
 
 class Calibrate
 {
@@ -13,9 +14,9 @@ public:
     ~Calibrate() = default;
 public:
     //打开相机
-    void openAndGet();
+    void openAndGet( std::string img_path, std::string style );
     //标定 计算结果
-    void calibrate_camera();
+    void calibrate_camera( bool use_camera, std::string path, int frame_num, std::string style );
     //输出结果
     void GetResult();
 public:
