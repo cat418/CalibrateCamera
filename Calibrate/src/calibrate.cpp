@@ -6,28 +6,17 @@ void Calibrate::calibrate_camera( bool use_camera, std::string path, int frame_n
     std::vector<cv::Mat> imgs;
     std::string onePath;
 
-    if( use_camera ) {
-        //创建文本
-        std::ofstream output ("calibrate.txt");
-        if( !output.is_open() ) {
-            std::cout << "为图像路径创建文本失败" << std::endl;
-        }
-        //将图片路径写入
-        for ( int i=0; i < m_count; i ++) {
-            output << m_outputPath[i] << std::endl;
-        }
-        //获取每一个图像的路径
-        std::ifstream allPath("calibrate.txt");
-        while (std::getline(allPath,onePath)) {
-            cv::Mat img = cv::imread( onePath );
+    //使用通配符 递归查找path下的图像
+    std::vector<cv::String> filePaths;
+    std::string frame_path = path + style;
+    std::cout << "Searching in: " << frame_path << std::endl;
+    cv::glob( frame_path, filePaths, true );
+    for( const auto& filePath :filePaths ) {
+        cv::Mat img = cv::imread( filePath );
+        if( !img.empty() ) {
             imgs.push_back( img );
-        }
-    } else {
-        for( int i = 1; i < frame_num + 1; i ++ ) {
-            std::string num = std::to_string( i );
-            onePath = path + num +style;
-            cv::Mat img = cv::imread( onePath );
-            imgs.push_back( img );
+        } else {
+            std::cerr << "无法加载图像: " << filePath << std::endl;
         }
     }
 
