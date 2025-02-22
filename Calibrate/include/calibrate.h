@@ -5,6 +5,8 @@
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #include <string>
+#include <memory>
+#include <chrono>
 
 class Calibrate
 {
@@ -23,10 +25,10 @@ public:
     int m_count;//图片数量
     std::string m_output;//路径
     std::vector<std::string> m_outputPath;//路径+图片名字
-    std::vector<std::vector<cv::Point3f>> all_point_3D;
+    std::unique_ptr<std::vector<std::vector<cv::Point3f>>> all_point_3D = std::make_unique<std::vector<std::vector<cv::Point3f>>>();
     std::vector<cv::Point3f> one_point_3D;
     cv::Point3f realPoint;
-    std::vector<std::vector<cv::Point2f>> all_point_2D;
+    std::vector<std::vector<cv::Point2f>> all_point_2D ;
     std::vector<cv::Point2f> one_point_2D;
     cv::Size realSize = cv::Size( 10, 10 );//棋盘格每个方格的真实尺寸
     cv::Mat m_matrix = cv::Mat ( 3, 3, CV_32FC1, cv::Scalar::all(0));//相机内参矩阵

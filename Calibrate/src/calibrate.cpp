@@ -20,6 +20,8 @@ void Calibrate::calibrate_camera( std::string path, std::string style ) {
         }
     }
 
+    all_point_3D->reserve(100);
+
     m_board_size = cv::Size(9,6);//方格标定板内角点数目(行,列)
     int num = 0;
     for( int i = 0; i < imgs.size(); i++ ) {
@@ -35,8 +37,10 @@ void Calibrate::calibrate_camera( std::string path, std::string style ) {
         cv::imshow( "num", img);
         all_point_2D.push_back( one_point_2D );
         num ++;
-        int key =cv::waitKey(0);
-        if( key == 13 ) {
+        std::cout << "第" << num << std::endl;
+        cv::waitKey(10);
+        if( i ==  imgs.size()-1 ) {
+            cv::destroyAllWindows();
             continue;
         }
     }
@@ -53,7 +57,7 @@ void Calibrate::calibrate_camera( std::string path, std::string style ) {
                 one_point_3D.push_back( realPoint );
             }
         }
-        all_point_3D.push_back( one_point_3D );
+        all_point_3D->push_back( one_point_3D );
     }
     //图像尺寸
     m_imgSize.width = imgs[0].cols;
